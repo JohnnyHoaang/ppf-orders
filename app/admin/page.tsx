@@ -146,6 +146,7 @@ export default function AdminDashboard() {
     const matchesSearch = 
       o.vehicle.make.toLowerCase().includes(filter.toLowerCase()) || 
       o.vehicle.model.toLowerCase().includes(filter.toLowerCase()) ||
+      o.customer.name.toLowerCase().includes(filter.toLowerCase()) ||
       o.id.includes(filter);
     
     const matchesStatus = statusFilter === 'all' || o.status === statusFilter;
@@ -270,7 +271,7 @@ export default function AdminDashboard() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 w-5 h-5" />
           <input 
             type="text" 
-            placeholder="Search make, model, or ID..." 
+            placeholder="Search name, make, model, or ID..." 
             className="w-full bg-zinc-900 border border-zinc-800 rounded-xl py-3 pl-10 text-white focus:outline-none focus:ring-2 focus:ring-brand-green/30"
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
