@@ -6,6 +6,7 @@ import { Search, Lock } from 'lucide-react';
 import AdminOrderCard from '../components/AdminOrderCard';
 import ConfirmModal from '../components/ConfirmModal';
 
+import EditOrderModal from '../components/EditOrderModal';
 import { supabase } from '@/lib/supabase';
 import { LogOut, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
@@ -24,6 +25,7 @@ export default function AdminDashboard() {
   const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'completed' | 'cancelled'>('all');
   
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [editingOrder, setEditingOrder] = useState<Order | null>(null);
 
   useEffect(() => {
     // Check active session
@@ -99,6 +101,25 @@ export default function AdminDashboard() {
       alert('Failed to delete');
     } finally {
       setDeleteId(null);
+    }
+  };
+
+  const handleSaveOrder = async (updatedOrder: Order) => {
+    try {
+      const res = await fetch(`/api/orders/${updatedOrder.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedOrder)
+      });
+      
+      if (res.ok) {
+        setOrders(orders.map(o => o.id === updatedOrder.id ? updatedOrder : o));
+        setEditingOrder(null);
+      } else {
+         alert('Failed to update order. Ensure you are logged in as admin.');
+      }
+    } catch (error) {
+      alert('Failed to save changes');
     }
   };
 
@@ -209,9 +230,8 @@ export default function AdminDashboard() {
       <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
         <div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-zinc-500 bg-clip-text text-transparent">
-            Admin Dashboard
+            Requests Dashboard
           </h1>
-          <p className="text-zinc-500 text-sm mt-1">Manage and track all protection orders</p>
         </div>
         <div className="flex items-center gap-4">
             <div className="px-4 py-2 bg-zinc-900 rounded-lg text-sm text-zinc-400 border border-zinc-800">
@@ -273,6 +293,7 @@ export default function AdminDashboard() {
                 order={order}
                 onDelete={(id) => setDeleteId(id)}
                 onStatusUpdate={handleStatusUpdate}
+                onEdit={(order) => setEditingOrder(order)}
               />
             ))
           )}
@@ -285,6 +306,13 @@ export default function AdminDashboard() {
         onConfirm={confirmDelete}
         title="Delete Order"
         message="Are you sure you want to permanently delete this order? This action cannot be undone."
+      />
+
+      <EditOrderModal
+        isOpen={!!editingOrder}
+        onClose={() => setEditingOrder(null)}
+        onSave={handleSaveOrder}
+        order={editingOrder}
       />
     </div>
   );

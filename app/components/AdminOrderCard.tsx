@@ -1,14 +1,15 @@
 import React from 'react';
 import { Order, PACKAGES, PackageLevel } from '../types';
-import { Trash2, Car, User, Mail, Phone } from 'lucide-react';
+import { Trash2, Car, User, Mail, Phone, Edit } from 'lucide-react';
 
 interface AdminOrderCardProps {
   order: Order;
   onDelete: (id: string) => void;
   onStatusUpdate: (order: Order, newStatus: Order['status']) => void;
+  onEdit: (order: Order) => void;
 }
 
-export default function AdminOrderCard({ order, onDelete, onStatusUpdate }: AdminOrderCardProps) {
+export default function AdminOrderCard({ order, onDelete, onStatusUpdate, onEdit }: AdminOrderCardProps) {
   const getPackageColor = (level: PackageLevel) => {
     return PACKAGES.find(p => p.level === level)?.colorInfo.split(' ')[2] || 'text-white';
   };
@@ -43,7 +44,7 @@ export default function AdminOrderCard({ order, onDelete, onStatusUpdate }: Admi
           )}
           
           {order.jobRequest && (
-            <div className="p-3 bg-zinc-950 rounded-lg text-sm text-zinc-300 border border-zinc-800/50">
+            <div className="p-3 bg-zinc-950 rounded-lg text-sm text-zinc-300 border border-zinc-800/50 whitespace-pre-wrap">
               <span className="text-zinc-500 block text-xs mb-1 uppercase tracking-wider">Requests</span>
               {order.jobRequest}
             </div>
@@ -71,13 +72,22 @@ export default function AdminOrderCard({ order, onDelete, onStatusUpdate }: Admi
               </select>
           </div>
           
-          <button 
-            onClick={() => onDelete(order.id)}
-            className="p-2 hover:bg-red-900/30 text-zinc-500 hover:text-red-400 rounded-lg transition-colors ml-auto"
-            title="Delete Order"
-          >
-            <Trash2 className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-2 ml-auto">
+             <button 
+                onClick={() => onEdit(order)}
+                className="p-2 hover:bg-zinc-800 text-zinc-500 hover:text-white rounded-lg transition-colors"
+                title="Edit Order"
+              >
+                <Edit className="w-5 h-5" />
+              </button>
+              <button 
+                onClick={() => onDelete(order.id)}
+                className="p-2 hover:bg-red-900/30 text-zinc-500 hover:text-red-400 rounded-lg transition-colors"
+                title="Delete Order"
+              >
+                <Trash2 className="w-5 h-5" />
+              </button>
+          </div>
         </div>
       </div>
     </div>

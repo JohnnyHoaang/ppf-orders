@@ -103,7 +103,7 @@ export default function Home() {
             </div>
         </div>
         <h1 className="text-3xl font-bold text-white mb-2">Paint Protection Film Premium Packages</h1>
-        <p className="text-zinc-400 text-sm">Select a package to protect your vehicle</p>
+        <p className="text-zinc-400 text-sm">Select a package for your vehicle</p>
       </header>
 
       {/* Package Selection */}

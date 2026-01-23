@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Auto Concierge PPF",
-  description: "Premium Paint Protection Film Orders",
+  title: "Tommy PPF",
+  description: "Premium Paint Protection Film Packages",
 };
 
 export default function RootLayout({
